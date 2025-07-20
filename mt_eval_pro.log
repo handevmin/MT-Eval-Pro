@@ -1,0 +1,188 @@
+2025-07-20 16:58:37,011 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 16:58:37,036 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 16:58:37,036 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 16:58:37,042 - data_processor - INFO - 추출된 번역 쌍: 0개
+2025-07-20 16:58:50,289 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 16:58:50,310 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 16:58:50,312 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 16:58:50,320 - data_processor - INFO - 추출된 번역 쌍: 0개
+2025-07-20 16:59:04,305 - evaluation_engine - INFO - 디렉토리 생성: results
+2025-07-20 16:59:04,307 - evaluation_engine - INFO - 디렉토리 생성: reports
+2025-07-20 16:59:04,748 - evaluation_engine - INFO - === MT-Eval Pro 전체 평가 시작 ===
+2025-07-20 16:59:04,750 - evaluation_engine - INFO - 1. 데이터 로드 중...
+2025-07-20 16:59:04,765 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 16:59:04,786 - data_processor - INFO - 메트릭스 데이터 로드 완료: (13, 3)
+2025-07-20 16:59:04,831 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 16:59:04,871 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 16:59:04,872 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 16:59:04,873 - evaluation_engine - INFO - 2. 번역 쌍 추출 중...
+2025-07-20 16:59:04,874 - data_processor - INFO - 추출된 번역 쌍: 0개
+2025-07-20 16:59:04,875 - evaluation_engine - ERROR - 평가 중 오류 발생: 유효한 번역 쌍을 찾을 수 없습니다.
+2025-07-20 16:59:08,970 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 16:59:09,008 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 16:59:09,009 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 16:59:09,020 - data_processor - INFO - 추출된 번역 쌍: 0개
+2025-07-20 16:59:20,277 - evaluation_engine - INFO - === MT-Eval Pro 전체 평가 시작 ===
+2025-07-20 16:59:20,277 - evaluation_engine - INFO - 1. 데이터 로드 중...
+2025-07-20 16:59:20,295 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 16:59:20,312 - data_processor - INFO - 메트릭스 데이터 로드 완료: (13, 3)
+2025-07-20 16:59:20,351 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 16:59:20,377 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 16:59:20,378 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 16:59:20,378 - evaluation_engine - INFO - 2. 번역 쌍 추출 중...
+2025-07-20 16:59:20,379 - data_processor - INFO - 추출된 번역 쌍: 0개
+2025-07-20 16:59:20,379 - evaluation_engine - ERROR - 평가 중 오류 발생: 유효한 번역 쌍을 찾을 수 없습니다.
+2025-07-20 17:09:26,938 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:09:27,168 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:09:27,173 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:09:36,497 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:09:36,546 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:09:36,547 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:09:36,615 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:09:36,685 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:09:36,688 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:09:36,704 - data_processor - INFO - 추출된 번역 쌍: 8개
+2025-07-20 17:09:43,684 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:09:43,730 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:09:43,730 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:09:45,149 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:09:45,193 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:09:45,194 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:10:23,833 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:10:23,866 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:10:23,866 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:10:23,933 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:10:23,983 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:10:23,989 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:10:24,004 - data_processor - INFO - 추출된 번역 쌍: 8개
+2025-07-20 17:10:25,122 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:10:25,156 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:10:25,157 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:10:34,390 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:10:34,478 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:10:34,480 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:10:34,521 - evaluation_engine - INFO - === MT-Eval Pro 사용자 지정 컬럼 평가 시작 ===
+2025-07-20 17:10:34,522 - evaluation_engine - INFO - 1. 데이터 로드 중...
+2025-07-20 17:10:34,556 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:10:34,616 - data_processor - INFO - 메트릭스 데이터 로드 완료: (13, 3)
+2025-07-20 17:10:34,684 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:10:34,756 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:10:34,757 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:10:34,757 - evaluation_engine - INFO - 2. 번역 쌍 추출 중...
+2025-07-20 17:10:34,758 - data_processor - INFO - 사용자 지정 컬럼 사용: SOURCE-EN -> TARGET-KO (ae-ar)
+2025-07-20 17:10:34,759 - data_processor - INFO - 추출된 번역 쌍: 4개
+2025-07-20 17:10:34,766 - evaluation_engine - INFO - 3. 데이터 유효성 검사 중...
+2025-07-20 17:10:34,767 - data_processor - INFO - 유효한 번역 쌍: 4개, 무효한 쌍: 0개
+2025-07-20 17:10:34,767 - evaluation_engine - INFO - 4. 데이터 통계 생성 중...
+2025-07-20 17:10:34,770 - evaluation_engine - INFO - 5. LLM 평가 실행 중...
+2025-07-20 17:10:34,770 - llm_evaluator - INFO - 총 4개의 번역 평가를 시작합니다.
+2025-07-20 17:10:34,773 - llm_evaluator - INFO - 진행률: 1/4 (25.0%)
+2025-07-20 17:10:34,773 - llm_evaluator - ERROR - 번역 쌍 1 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:10:34,773 - llm_evaluator - INFO - 진행률: 2/4 (50.0%)
+2025-07-20 17:10:34,774 - llm_evaluator - ERROR - 번역 쌍 2 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:10:34,774 - llm_evaluator - INFO - 진행률: 3/4 (75.0%)
+2025-07-20 17:10:34,774 - llm_evaluator - ERROR - 번역 쌍 3 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:10:34,775 - llm_evaluator - INFO - 진행률: 4/4 (100.0%)
+2025-07-20 17:10:34,775 - llm_evaluator - ERROR - 번역 쌍 4 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:10:34,775 - llm_evaluator - INFO - 배치 평가 완료: 4개 결과
+2025-07-20 17:10:34,776 - evaluation_engine - INFO - 6. 집계 점수 계산 중...
+2025-07-20 17:10:34,777 - evaluation_engine - INFO - 7. 결과 저장 중...
+2025-07-20 17:10:34,790 - evaluation_engine - INFO - JSON 결과 저장: results\evaluation_results_20250720_171034.json
+2025-07-20 17:10:35,365 - evaluation_engine - INFO - Excel 결과 저장: results\evaluation_results_20250720_171034.xlsx
+2025-07-20 17:10:35,366 - evaluation_engine - INFO - === 사용자 지정 컬럼 평가 완료 ===
+2025-07-20 17:47:25,538 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:47:25,621 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:47:25,622 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:47:28,787 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:47:28,816 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:47:28,818 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:47:28,878 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:47:28,913 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:47:28,913 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:47:28,921 - data_processor - INFO - 추출된 번역 쌍: 8개
+2025-07-20 17:47:36,295 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:47:36,333 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:47:36,335 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:47:40,973 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:47:41,037 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:47:41,038 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:47:48,846 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:47:48,876 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:47:48,876 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:47:48,902 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:47:48,914 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:47:48,915 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:47:48,921 - data_processor - INFO - 추출된 번역 쌍: 20개
+2025-07-20 17:48:06,448 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:48:06,476 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:48:06,477 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:48:12,145 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:48:12,179 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:48:12,179 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:48:14,863 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 17:48:14,899 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 17:48:14,899 - data_processor - INFO - 데이터 형태: (4, 7)
+2025-07-20 17:48:14,926 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:48:14,947 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:48:14,947 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:48:14,954 - data_processor - INFO - 추출된 번역 쌍: 20개
+2025-07-20 17:48:43,054 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:48:43,068 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:48:43,069 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:48:45,642 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:48:45,661 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:48:45,661 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:48:45,689 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:48:45,706 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:48:45,708 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:48:45,713 - data_processor - INFO - 추출된 번역 쌍: 20개
+2025-07-20 17:48:58,962 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:48:58,977 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:48:58,977 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:49:02,955 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:49:02,973 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:49:02,973 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:49:02,988 - evaluation_engine - INFO - === MT-Eval Pro 사용자 지정 컬럼 평가 시작 ===
+2025-07-20 17:49:02,989 - evaluation_engine - INFO - 1. 데이터 로드 중...
+2025-07-20 17:49:03,010 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:49:03,025 - data_processor - INFO - 메트릭스 데이터 로드 완료: (13, 3)
+2025-07-20 17:49:03,039 - data_processor - INFO - 사용 가능한 시트: ['Sheet1']
+2025-07-20 17:49:03,053 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-FR', 'TARGET-PT']
+2025-07-20 17:49:03,054 - data_processor - INFO - 데이터 형태: (10, 3)
+2025-07-20 17:49:03,054 - evaluation_engine - INFO - 2. 번역 쌍 추출 중...
+2025-07-20 17:49:03,054 - data_processor - INFO - 사용자 지정 컬럼 사용: SOURCE-EN -> TARGET-FR (fr-fr)
+2025-07-20 17:49:03,055 - data_processor - INFO - 추출된 번역 쌍: 10개
+2025-07-20 17:49:03,055 - evaluation_engine - INFO - 3. 데이터 유효성 검사 중...
+2025-07-20 17:49:03,055 - data_processor - INFO - 유효한 번역 쌍: 10개, 무효한 쌍: 0개
+2025-07-20 17:49:03,055 - evaluation_engine - INFO - 4. 데이터 통계 생성 중...
+2025-07-20 17:49:03,056 - evaluation_engine - INFO - 5. LLM 평가 실행 중...
+2025-07-20 17:49:03,056 - llm_evaluator - INFO - 총 10개의 번역 평가를 시작합니다.
+2025-07-20 17:49:03,056 - llm_evaluator - INFO - 진행률: 1/10 (10.0%)
+2025-07-20 17:49:03,057 - llm_evaluator - ERROR - 번역 쌍 1 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,059 - llm_evaluator - INFO - 진행률: 2/10 (20.0%)
+2025-07-20 17:49:03,060 - llm_evaluator - ERROR - 번역 쌍 2 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,060 - llm_evaluator - INFO - 진행률: 3/10 (30.0%)
+2025-07-20 17:49:03,060 - llm_evaluator - ERROR - 번역 쌍 3 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,061 - llm_evaluator - INFO - 진행률: 4/10 (40.0%)
+2025-07-20 17:49:03,061 - llm_evaluator - ERROR - 번역 쌍 4 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,061 - llm_evaluator - INFO - 진행률: 5/10 (50.0%)
+2025-07-20 17:49:03,062 - llm_evaluator - ERROR - 번역 쌍 5 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,062 - llm_evaluator - INFO - 진행률: 6/10 (60.0%)
+2025-07-20 17:49:03,062 - llm_evaluator - ERROR - 번역 쌍 6 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,062 - llm_evaluator - INFO - 진행률: 7/10 (70.0%)
+2025-07-20 17:49:03,063 - llm_evaluator - ERROR - 번역 쌍 7 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,063 - llm_evaluator - INFO - 진행률: 8/10 (80.0%)
+2025-07-20 17:49:03,063 - llm_evaluator - ERROR - 번역 쌍 8 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,063 - llm_evaluator - INFO - 진행률: 9/10 (90.0%)
+2025-07-20 17:49:03,063 - llm_evaluator - ERROR - 번역 쌍 9 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,063 - llm_evaluator - INFO - 진행률: 10/10 (100.0%)
+2025-07-20 17:49:03,064 - llm_evaluator - ERROR - 번역 쌍 10 평가 중 오류: '\n    "evaluation"'
+2025-07-20 17:49:03,064 - llm_evaluator - INFO - 배치 평가 완료: 10개 결과
+2025-07-20 17:49:03,064 - evaluation_engine - INFO - 6. 집계 점수 계산 중...
+2025-07-20 17:49:03,064 - evaluation_engine - INFO - 7. 결과 저장 중...
+2025-07-20 17:49:03,078 - evaluation_engine - INFO - JSON 결과 저장: results\evaluation_results_20250720_174903.json
+2025-07-20 17:49:03,189 - evaluation_engine - INFO - Excel 결과 저장: results\evaluation_results_20250720_174903.xlsx
+2025-07-20 17:49:03,189 - evaluation_engine - INFO - === 사용자 지정 컬럼 평가 완료 ===
+2025-07-20 18:11:39,540 - data_processor - INFO - 사용 가능한 시트: ['Sampe_A']
+2025-07-20 18:11:39,665 - data_processor - INFO - 컬럼: ['SOURCE-EN', 'TARGET-KO', 'OVERALL', 'ACCURACY', 'OMISSION/ADDITION', 'COMPLIANCE', 'FLUENCY']
+2025-07-20 18:11:39,749 - data_processor - INFO - 데이터 형태: (4, 7)
