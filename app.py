@@ -14,7 +14,7 @@ import zipfile
 # 페이지 설정
 st.set_page_config(
     page_title="MT-Eval Pro",
-    page_icon="📊",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -83,34 +83,22 @@ class MTEvalProApp:
         
         st.markdown("---")
         
-        # 2단계: 데이터 소스 선택
+        # 2단계: 데이터 파일 선택
         st.markdown("### 2단계: 데이터 파일 선택")
-        st.markdown("평가에 사용할 데이터 파일을 선택하세요.")
+        st.markdown("평가에 사용할 Excel 파일을 업로드하세요.")
         
-        file_option = st.radio(
-            "다음 중 하나를 선택하세요:",
-            ["기본 파일 사용 (샘플 데이터)", "내 파일 업로드"],
-            help="기본 파일: 시스템에 포함된 샘플 데이터를 사용합니다.\n내 파일 업로드: 직접 Excel 파일을 업로드합니다."
+        uploaded_file = st.file_uploader(
+            "Excel 파일을 선택하세요:",
+            type=['xlsx', 'xls'],
+            help="소스 텍스트와 번역 텍스트 컬럼이 포함된 Excel 파일을 업로드하세요."
         )
         
-        if file_option == "내 파일 업로드":
-            uploaded_file = st.file_uploader(
-                "Excel 파일을 선택하세요:",
-                type=['xlsx', 'xls'],
-                help="소스 텍스트와 번역 텍스트 컬럼이 포함된 Excel 파일을 업로드하세요."
-            )
-            
-            if uploaded_file:
-                st.session_state.translation_file = uploaded_file
-                st.success(f"파일이 업로드되었습니다: {uploaded_file.name}")
-            else:
-                st.info("Excel 파일을 업로드해주세요.")
-                return
+        if uploaded_file:
+            st.session_state.translation_file = uploaded_file
+            st.success(f"파일이 업로드되었습니다: {uploaded_file.name}")
         else:
-            st.info("기본 샘플 파일을 사용합니다.")
-            # 기본 파일 사용시 세션 상태에서 제거
-            if 'translation_file' in st.session_state:
-                del st.session_state.translation_file
+            st.info("Excel 파일을 업로드해주세요.")
+            return
         
         st.markdown("---")
         
@@ -124,7 +112,7 @@ class MTEvalProApp:
             processor = DataProcessor()
             
             translation_file = None
-            if file_option == "내 파일 업로드" and 'translation_file' in st.session_state:
+            if 'translation_file' in st.session_state:
                 import tempfile
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
                     tmp.write(st.session_state.translation_file.getbuffer())
@@ -163,7 +151,7 @@ class MTEvalProApp:
                 if available_targets:
                     # 언어 정보 표시
                     st.markdown("**C. 언어 확인**")
-                    col3, col4 = st.columns([2, 1])
+                    col3, col4 = st.columns([1, 1])
                     
                     with col3:
                         st.success(f"감지된 언어: **{selected_target_info['language_name']}** ({selected_target_info['language_code']})")
@@ -222,15 +210,12 @@ class MTEvalProApp:
         )
         
         if ready_for_evaluation:
-            col1, col2 = st.columns([2, 1])
+            st.success("평가 준비 완료! 평가를 시작할 수 있습니다.")
+            st.info("기본 설정: 최대 10개 번역 쌍을 5개씩 병렬로 평가합니다.")
             
-            with col1:
-                st.success("평가 준비 완료! 평가를 시작할 수 있습니다.")
-                st.info("기본 설정: 최대 10개 번역 쌍을 5개씩 병렬로 평가합니다.")
-            
-            with col2:
-                if st.button("데이터 미리보기", type="secondary"):
-                    self.preview_data()
+            # 데이터 미리보기 버튼을 별도 섹션으로 분리
+            if st.button("데이터 미리보기", type="secondary", use_container_width=True):
+                self.preview_data()
         else:
             missing_items = []
             if not st.session_state.evaluation_engine:
@@ -265,13 +250,16 @@ class MTEvalProApp:
             from data_processor import DataProcessor
             processor = DataProcessor()
             
-            # 파일 경로 결정
+            # 업로드된 파일 처리
+            if 'translation_file' not in st.session_state:
+                st.error("파일이 업로드되지 않았습니다.")
+                return
+            
             translation_file = None
-            if 'translation_file' in st.session_state:
-                # 업로드된 파일을 임시 저장
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
-                    tmp.write(st.session_state.translation_file.getbuffer())
-                    translation_file = tmp.name
+            # 업로드된 파일을 임시 저장
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
+                tmp.write(st.session_state.translation_file.getbuffer())
+                translation_file = tmp.name
             
             # 데이터 로드
             df = processor.load_translation_data(translation_file)
@@ -320,13 +308,15 @@ class MTEvalProApp:
             status_text.text("평가 준비 중...")
             detail_text.text("설정을 확인하고 데이터를 준비하는 중입니다.")
             
-            # 파일 경로 설정
-            translation_file = None
+            # 업로드된 파일 처리
+            if 'translation_file' not in st.session_state:
+                st.error("파일이 업로드되지 않았습니다.")
+                return
             
-            if 'translation_file' in st.session_state:
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
-                    tmp.write(st.session_state.translation_file.getbuffer())
-                    translation_file = tmp.name
+            translation_file = None
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
+                tmp.write(st.session_state.translation_file.getbuffer())
+                translation_file = tmp.name
             
             progress_bar.progress(10)
             status_text.text("데이터 로드 중...")
@@ -403,7 +393,7 @@ class MTEvalProApp:
             # 최종 메트릭 표시
             if 'aggregate_scores' in results and 'overall' in results['aggregate_scores']:
                 with metrics_container.container():
-                    st.subheader("📊 최종 평가 결과")
+                    st.subheader("최종 평가 결과")
                     metrics_data = results['aggregate_scores']['overall']
                     
                     cols = st.columns(len(metrics_data))
@@ -426,10 +416,11 @@ class MTEvalProApp:
                 updated_file_path = results['metadata']['updated_file_path']
                 with open(updated_file_path, 'rb') as f:
                     st.download_button(
-                        label="📥 점수가 채워진 원본 파일 다운로드",
+                        label="점수가 채워진 원본 파일 다운로드",
                         data=f.read(),
                         file_name=os.path.basename(updated_file_path),
-                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        key="download_updated_file"
                     )
             
             # 빠른 결과 표시
@@ -561,24 +552,26 @@ class MTEvalProApp:
                 # 다운로드 버튼
                 csv = df.to_csv(index=False)
                 st.download_button(
-                    label="📥 CSV 다운로드",
+                    label="CSV 다운로드",
                     data=csv,
                     file_name=f"evaluation_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-                    mime="text/csv"
+                    mime="text/csv",
+                    key="download_csv_results"
                 )
             else:
                 st.info("선택한 조건에 맞는 결과가 없습니다.")
         
         # 결과 파일 다운로드
-        st.subheader("📥 결과 다운로드")
+        st.subheader("결과 다운로드")
         
-        if st.button("📦 전체 결과 다운로드 (JSON)"):
+        if st.button("전체 결과 다운로드 (JSON)", key="prepare_json_download"):
             json_str = json.dumps(results, ensure_ascii=False, indent=2)
             st.download_button(
-                label="📥 JSON 파일 다운로드",
+                label="JSON 파일 다운로드",
                 data=json_str,
                 file_name=f"mt_eval_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
-                mime="application/json"
+                mime="application/json",
+                key="download_json_results"
             )
     
     def metrics_settings_tab(self):
@@ -593,7 +586,7 @@ class MTEvalProApp:
             st.session_state.custom_scale = self.config.EVALUATION_SCALE.copy()
         
         # 메트릭 설정 섹션
-        st.subheader("📏 평가 메트릭 정의")
+        st.subheader("평가 메트릭 정의")
         st.markdown("각 메트릭의 정의를 수정할 수 있습니다.")
         
         metrics_updated = False
@@ -612,7 +605,7 @@ class MTEvalProApp:
                     metrics_updated = True
         
         # 스케일 설정 섹션
-        st.subheader("📊 평가 스케일 정의")
+        st.subheader("평가 스케일 정의")
         st.markdown("각 점수별 기준을 수정할 수 있습니다.")
         
         scale_updated = False
@@ -634,23 +627,23 @@ class MTEvalProApp:
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            if st.button("🔄 기본값으로 리셋"):
+            if st.button("기본값으로 리셋"):
                 st.session_state.custom_metrics = self.config.EVALUATION_METRICS.copy()
                 st.session_state.custom_scale = self.config.EVALUATION_SCALE.copy()
                 st.success("설정이 기본값으로 리셋되었습니다.")
                 st.rerun()
         
         with col2:
-            if st.button("💾 설정 저장"):
+            if st.button("설정 저장"):
                 self.save_custom_settings()
                 st.success("사용자 설정이 저장되었습니다.")
         
         with col3:
-            if st.button("📂 설정 내보내기"):
+            if st.button("설정 내보내기"):
                 self.export_settings()
         
         # 설정 가져오기
-        st.subheader("📥 설정 가져오기")
+        st.subheader("설정 가져오기")
         st.markdown("이전에 내보낸 설정 파일을 업로드하여 메트릭과 스케일 정의를 복원할 수 있습니다.")
         
         uploaded_settings = st.file_uploader(
@@ -712,7 +705,7 @@ class MTEvalProApp:
                 st.markdown(f"**{score}점**: {definition}")
         
         # 시스템 정보
-        st.subheader("ℹ️ 시스템 정보")
+        st.subheader("시스템 정보")
         
         with st.expander("지원 언어"):
             lang_df = pd.DataFrame([
@@ -774,10 +767,11 @@ class MTEvalProApp:
             settings_json = json.dumps(settings_data, ensure_ascii=False, indent=2)
             
             st.download_button(
-                label="📥 설정 파일 다운로드",
+                label="설정 파일 다운로드",
                 data=settings_json,
                 file_name=f"mt_eval_settings_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
-                mime="application/json"
+                mime="application/json",
+                key="download_settings_file"
             )
         except Exception as e:
             st.error(f"설정 내보내기 중 오류: {e}")

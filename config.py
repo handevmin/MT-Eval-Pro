@@ -1,17 +1,13 @@
 import os
-from dotenv import load_dotenv
-
-# 환경변수 로드
-load_dotenv()
 
 class Config:
     """MT-Eval Pro 설정 클래스"""
     
-    # OpenAI API 설정
-    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-    DEFAULT_MODEL = os.getenv('DEFAULT_MODEL', 'gpt-4.1')
-    MAX_TOKENS = int(os.getenv('MAX_TOKENS', 4000))
-    TEMPERATURE = float(os.getenv('TEMPERATURE', 0.1))
+    # OpenAI API 설정 (기본값 사용)
+    OPENAI_API_KEY = None  # 애플리케이션에서 직접 설정
+    DEFAULT_MODEL = 'gpt-4'
+    MAX_TOKENS = 4000
+    TEMPERATURE = 0.1
     
     # 지원 언어 코드
     SUPPORTED_LANGUAGES = {
