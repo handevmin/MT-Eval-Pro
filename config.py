@@ -5,7 +5,7 @@ class Config:
     
     # OpenAI API 설정 (기본값 사용)
     OPENAI_API_KEY = None  # 애플리케이션에서 직접 설정
-    DEFAULT_MODEL = 'gpt-4'
+    DEFAULT_MODEL = 'gpt-4o-mini'
     MAX_TOKENS = 4000
     TEMPERATURE = 0.1
     

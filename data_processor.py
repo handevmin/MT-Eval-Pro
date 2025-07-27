@@ -46,12 +46,18 @@ class DataProcessor:
             file_path = self.config.SAMPLE_FILE
         
         try:
-            # Excel 파일의 모든 시트 확인
-            excel_file = pd.ExcelFile(file_path)
-            self.logger.info(f"사용 가능한 시트: {excel_file.sheet_names}")
-            
-            # 첫 번째 시트 로드
-            df = pd.read_excel(file_path, sheet_name=0)
+            # 파일 확장자 확인
+            if file_path.lower().endswith('.csv'):
+                # CSV 파일 로드
+                df = pd.read_csv(file_path)
+                self.logger.info(f"CSV 파일 로드: {file_path}")
+            else:
+                # Excel 파일 로드
+                excel_file = pd.ExcelFile(file_path)
+                self.logger.info(f"사용 가능한 시트: {excel_file.sheet_names}")
+                
+                # 첫 번째 시트 로드
+                df = pd.read_excel(file_path, sheet_name=0)
             
             # 컬럼 정보 출력
             self.logger.info(f"컬럼: {list(df.columns)}")

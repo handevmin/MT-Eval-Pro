@@ -104,6 +104,7 @@ class EvaluationEngine:
                                        max_evaluations: int = None,
                                        custom_metrics: dict = None,
                                        custom_scale: dict = None,
+                                       reference_data: dict = None,
                                        save_results: bool = True) -> Dict:
         """사용자 지정 컬럼으로 전체 평가 프로세스를 실행합니다."""
         
@@ -168,12 +169,13 @@ class EvaluationEngine:
                 max_concurrent=max_concurrent,
                 custom_metrics=custom_metrics,
                 custom_scale=custom_scale,
+                reference_data=reference_data,
                 progress_callback=progress_callback
             )
             
-            # 7. 집계 점수 계산
-            self.logger.info("6. 집계 점수 계산 중...")
-            aggregate_scores = self.llm_evaluator.calculate_aggregate_scores(evaluation_results)
+            # 7. 집계 점수 계산 (제거됨)
+            # self.logger.info("6. 집계 점수 계산 중...")
+            # aggregate_scores = self.llm_evaluator.calculate_aggregate_scores(evaluation_results)
             
             # 8. 결과 통합
             final_results = {
@@ -191,7 +193,7 @@ class EvaluationEngine:
                 },
                 'language_statistics': language_stats,
                 'evaluation_results': evaluation_results,
-                'aggregate_scores': aggregate_scores,
+                # 'aggregate_scores': aggregate_scores,  # 제거됨
                 'detailed_results': self._create_detailed_analysis(evaluation_results, language_stats)
             }
             

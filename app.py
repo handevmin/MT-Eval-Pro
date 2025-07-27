@@ -85,12 +85,12 @@ class MTEvalProApp:
         
         # 2단계: 데이터 파일 선택
         st.markdown("### 2단계: 데이터 파일 선택")
-        st.markdown("평가에 사용할 Excel 파일을 업로드하세요.")
+        st.markdown("평가에 사용할 Excel 또는 CSV 파일을 업로드하세요.")
         
         uploaded_file = st.file_uploader(
-            "Excel 파일을 선택하세요:",
-            type=['xlsx', 'xls'],
-            help="소스 텍스트와 번역 텍스트 컬럼이 포함된 Excel 파일을 업로드하세요."
+            "Excel 또는 CSV 파일을 선택하세요:",
+            type=['xlsx', 'xls', 'csv'],
+            help="소스 텍스트와 번역 텍스트 컬럼이 포함된 Excel 또는 CSV 파일을 업로드하세요."
         )
         
         if uploaded_file:
@@ -104,7 +104,7 @@ class MTEvalProApp:
         
         # 3단계: 컬럼 선택
         st.markdown("### 3단계: 컬럼 선택")
-        st.markdown("Excel 파일에서 소스 텍스트와 번역 텍스트가 있는 컬럼을 선택하세요.")
+        st.markdown("파일에서 소스 텍스트와 번역 텍스트가 있는 컬럼을 선택하세요.")
         
         # 데이터 로드하여 컬럼 정보 얻기
         try:
@@ -114,7 +114,10 @@ class MTEvalProApp:
             translation_file = None
             if 'translation_file' in st.session_state:
                 import tempfile
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
+                # 파일 확장자에 따라 적절한 suffix 설정
+                file_extension = st.session_state.translation_file.name.split('.')[-1].lower()
+                suffix = f'.{file_extension}'
+                with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
                     tmp.write(st.session_state.translation_file.getbuffer())
                     translation_file = tmp.name
             
@@ -329,6 +332,9 @@ class MTEvalProApp:
             custom_metrics = st.session_state.get('custom_metrics')
             custom_scale = st.session_state.get('custom_scale')
             
+            # 참고 데이터 가져오기
+            reference_data = st.session_state.get('reference_data')
+            
             progress_bar.progress(20)
             status_text.text("번역 쌍 추출 중...")
             detail_text.text(f"소스: {column_selection['source_column']} → 타겟: {column_selection['target_column']}")
@@ -379,6 +385,7 @@ class MTEvalProApp:
                 max_evaluations=max_evaluations,
                 custom_metrics=custom_metrics,
                 custom_scale=custom_scale,
+                reference_data=reference_data,
                 save_results=True
             )
             
@@ -641,6 +648,80 @@ class MTEvalProApp:
         with col3:
             if st.button("설정 내보내기"):
                 self.export_settings()
+        
+        # 참고 데이터 설정
+        st.subheader("참고 데이터 설정")
+        st.markdown("사람이 이미 평가한 데이터를 업로드하여 AI 평가의 정확도를 향상시킬 수 있습니다.")
+        
+        reference_file = st.file_uploader(
+            "참고 데이터 파일 업로드 (Excel/CSV)",
+            type=['xlsx', 'xls', 'csv'],
+            help="이미 사람이 평가한 번역 데이터가 포함된 Excel 또는 CSV 파일을 업로드하세요. 점수 컬럼이 포함되어 있어야 합니다.",
+            key="reference_data_uploader"
+        )
+        
+        if reference_file:
+            try:
+                # 참고 데이터 미리보기
+                import tempfile
+                # 파일 확장자에 따라 적절한 suffix 설정
+                file_extension = reference_file.name.split('.')[-1].lower()
+                suffix = f'.{file_extension}'
+                with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+                    tmp.write(reference_file.getbuffer())
+                    ref_file_path = tmp.name
+                
+                # 데이터 로드 및 컬럼 확인
+                from data_processor import DataProcessor
+                processor = DataProcessor()
+                ref_df = processor.load_translation_data(ref_file_path)
+                
+                if not ref_df.empty:
+                    st.success(f"참고 데이터 로드 성공: {ref_df.shape[0]}행 × {ref_df.shape[1]}열")
+                    
+                    # 점수 컬럼 확인
+                    score_columns = []
+                    for col in ref_df.columns:
+                        if any(metric.lower() in col.lower() for metric in ['accuracy', 'omission', 'addition', 'compliance', 'fluency', 'overall', 'score']):
+                            score_columns.append(col)
+                    
+                    if score_columns:
+                        st.info(f"감지된 점수 컬럼: {', '.join(score_columns)}")
+                        
+                        # 참고 데이터 미리보기
+                        with st.expander("참고 데이터 미리보기"):
+                            st.dataframe(ref_df.head(5), use_container_width=True)
+                        
+                        # 세션 상태에 저장
+                        st.session_state.reference_data = {
+                            'file_path': ref_file_path,
+                            'dataframe': ref_df,
+                            'score_columns': score_columns
+                        }
+                        
+                        st.success("참고 데이터가 성공적으로 설정되었습니다. AI 평가 시 이 데이터를 참고합니다.")
+                    else:
+                        st.warning("점수 컬럼을 찾을 수 없습니다. Accuracy, Omission, Compliance, Fluency, Overall 등의 컬럼이 있는지 확인해주세요.")
+                        if st.button("참고 데이터 제거"):
+                            if 'reference_data' in st.session_state:
+                                del st.session_state.reference_data
+                            st.rerun()
+                else:
+                    st.error("참고 데이터를 로드할 수 없습니다.")
+                    
+            except Exception as e:
+                st.error(f"참고 데이터 로드 중 오류: {e}")
+        else:
+            # 참고 데이터 제거 옵션
+            if 'reference_data' in st.session_state:
+                if st.button("참고 데이터 제거"):
+                    del st.session_state.reference_data
+                    st.success("참고 데이터가 제거되었습니다.")
+                    st.rerun()
+                else:
+                    st.info("현재 참고 데이터가 설정되어 있습니다.")
+        
+        st.markdown("---")
         
         # 설정 가져오기
         st.subheader("설정 가져오기")

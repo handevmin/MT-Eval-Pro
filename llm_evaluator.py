@@ -8,6 +8,7 @@ import re
 import asyncio
 import concurrent.futures
 from threading import Thread
+import pandas as pd
 
 class LLMEvaluator:
     """LLM을 사용한 번역 품질 평가 클래스"""
@@ -32,14 +33,16 @@ class LLMEvaluator:
         """번역 평가를 위한 프롬프트 템플릿을 생성합니다."""
         
         template = """
-당신은 엄격한 기계 번역 품질 평가 전문가입니다. 주어진 소스 텍스트와 번역 텍스트를 다음 기준에 따라 **매우 엄격하게** 평가해주세요.
+당신은 극도로 엄격한 기계 번역 품질 평가 전문가입니다. 주어진 소스 텍스트와 번역 텍스트를 다음 기준에 따라 **극도로 엄격하게** 평가해주세요. **기본적으로 1점부터 시작하고, 완벽할 때만 5점을 주세요.**
 
 ## 중요한 평가 원칙
-1. **완벽한 번역만 5점**을 받을 수 있습니다
-2. **사소한 문제라도 있으면 4점 이하**로 평가하세요
-3. **문제점을 적극적으로 찾아서** 지적해주세요
-4. **의심스러운 부분이 있으면 낮은 점수**를 주세요
-5. **자연스럽지 않은 표현, 어색한 번역, 용어 일관성 부족** 등을 주의깊게 살펴보세요
+1. **기본적으로 1점부터 시작**: 모든 번역은 기본적으로 1점으로 시작하고, 완벽할 때만 5점을 주세요.
+2. **5점은 정말 완벽한 경우만**: 오타, 문법 오류, 어색한 표현, 의미 전달 오류가 전혀 없는 경우에만 5점을 부여하세요.
+3. **문제점을 적극적으로 찾아서** 지적해주세요.
+4. **의심스러운 부분이 있으면 낮은 점수**를 주세요.
+5. **자연스럽지 않은 표현, 어색한 번역, 용어 일관성 부족** 등을 주의깊게 살펴보세요.
+6. **참고 데이터 기준 준수**: 제공된 참고 데이터의 점수 분포를 참고하여 비슷한 품질의 번역에 비슷한 점수를 부여하세요.
+7. **대부분의 번역은 1-3점**: 4-5점은 정말 예외적인 경우에만 부여하세요.
 
 ## 평가 메트릭스
 {metrics_description}
@@ -53,8 +56,10 @@ class LLMEvaluator:
 - **소스 텍스트**: {source_text}
 - **번역 텍스트**: {target_text}
 
+{reference_examples}
+
 ## 평가 요청
-각 메트릭스(Accuracy, Omission/Addition, Compliance, Fluency, Overall)에 대해 1-5점으로 **엄격하게** 평가하고, **문제점을 중심으로** 구체적인 근거를 제시해주세요.
+각 메트릭스(Accuracy, Omission/Addition, Compliance, Fluency, Overall)에 대해 1-5점으로 **극도로 엄격하게** 평가하고, **문제점을 중심으로** 구체적인 근거를 제시해주세요. **기본적으로 1점부터 시작하고, 완벽할 때만 5점을 주세요.**
 
 응답은 반드시 다음 JSON 형식으로 제공해주세요:
 
@@ -62,23 +67,23 @@ class LLMEvaluator:
 {{
     "evaluation": {{
         "Accuracy": {{
-            "score": [1-5 사이의 숫자],
+            "score": [1-5 사이의 정수],
             "reasoning": "평가 근거"
         }},
         "Omission/Addition": {{
-            "score": [1-5 사이의 숫자],
+            "score": [1-5 사이의 정수],
             "reasoning": "평가 근거"
         }},
         "Compliance": {{
-            "score": [1-5 사이의 숫자],
+            "score": [1-5 사이의 정수],
             "reasoning": "평가 근거"
         }},
         "Fluency": {{
-            "score": [1-5 사이의 숫자],
+            "score": [1-5 사이의 정수],
             "reasoning": "평가 근거"
         }},
         "Overall": {{
-            "score": [1-5 사이의 숫자],
+            "score": [1-5 사이의 정수],
             "reasoning": "전체적인 평가 근거"
         }}
     }},
@@ -87,19 +92,21 @@ class LLMEvaluator:
 }}
 ```
 
-평가 시 다음 사항을 **엄격하게** 고려해주세요:
+평가 시 다음 사항을 **극도로 엄격하게** 고려해주세요:
 1. 각 메트릭스의 정의를 정확히 따르고, **문제점을 적극적으로 찾으세요**.
 2. 타겟 언어에서 **부자연스러운 표현이나 문법 오류**를 주의깊게 찾아보세요.
-3. Google 스타일 가이드 **위반 사항을 철저히 검토**하세요.
-4. **완벽하지 않은 부분은 반드시 점수에 반영**하고 구체적인 근거를 제시하세요.
-5. **의심스럽거나 개선이 필요한 부분이 있으면 낮은 점수**를 주세요.
+3. **완벽하지 않은 부분은 반드시 점수에 반영**하고 구체적인 근거를 제시하세요.
+4. **의심스럽거나 개선이 필요한 부분이 있으면 낮은 점수**를 주세요.
+5. **기본적으로 1점부터 시작**: 모든 번역은 기본적으로 1점으로 시작하세요.
+6. **5점은 정말 완벽한 경우만**: 오타, 문법 오류, 어색한 표현이 전혀 없는 경우에만 5점을 주세요.
+7. **대부분의 번역은 1-3점**: 4-5점은 정말 예외적인 경우에만 부여하세요.
 """
         
         return template
     
     def evaluate_translation(self, source_text: str, target_text: str, 
                            target_language: str, custom_metrics: dict = None, 
-                           custom_scale: dict = None) -> Dict:
+                           custom_scale: dict = None, reference_data: dict = None) -> Dict:
         """단일 번역을 평가합니다."""
         
         # 언어명 변환
@@ -108,6 +115,9 @@ class LLMEvaluator:
         # 메트릭스와 스케일 설정 (사용자 정의 우선)
         metrics_to_use = custom_metrics or self.config.EVALUATION_METRICS
         scale_to_use = custom_scale or self.config.EVALUATION_SCALE
+        
+        self.logger.info(f"사용할 메트릭: {list(metrics_to_use.keys())}")
+        self.logger.info(f"사용할 스케일: {list(scale_to_use.keys())}")
         
         # 메트릭스 정의 생성
         metrics_description = ""
@@ -119,21 +129,75 @@ class LLMEvaluator:
         for score, definition in scale_to_use.items():
             scale_description += f"**{score}점**: {definition}\n\n"
         
+        self.logger.info(f"메트릭 설명 길이: {len(metrics_description)}자")
+        self.logger.info(f"스케일 설명 길이: {len(scale_description)}자")
+        
+        # 참고 데이터 처리
+        reference_examples = ""
+        self.logger.info(f"참고 데이터 확인: {reference_data}")
+        if reference_data and 'dataframe' in reference_data:
+            ref_df = reference_data['dataframe']
+            score_cols = reference_data.get('score_columns', [])
+            
+            self.logger.info(f"참고 데이터 처리 중: {len(ref_df)}행, 점수 컬럼: {score_cols}")
+            
+            # 유사한 번역 쌍 찾기 (소스 텍스트 길이 기준)
+            source_length = len(source_text)
+            ref_df['source_length_diff'] = abs(ref_df.iloc[:, 0].str.len() - source_length)
+            similar_examples = ref_df.nsmallest(3, 'source_length_diff')
+            
+            if not similar_examples.empty:
+                reference_examples = "\n\n## 참고 예시 (사람이 평가한 유사한 번역들)\n"
+                reference_examples += "**이 예시들의 점수 분포를 참고하여 비슷한 품질의 번역에 비슷한 점수를 부여하세요.**\n"
+                self.logger.info(f"참고 예시 {len(similar_examples)}개 찾음")
+                
+                for idx, row in similar_examples.iterrows():
+                    ref_source = str(row.iloc[0])[:100] + "..." if len(str(row.iloc[0])) > 100 else str(row.iloc[0])
+                    ref_target = str(row.iloc[1])[:100] + "..." if len(str(row.iloc[1])) > 100 else str(row.iloc[1])
+                    
+                    reference_examples += f"\n**예시 {idx+1}:**\n"
+                    reference_examples += f"- 소스: {ref_source}\n"
+                    reference_examples += f"- 번역: {ref_target}\n"
+                    
+                    # 점수 정보 추가
+                    for col in score_cols:
+                        if col in row and pd.notna(row[col]):
+                            reference_examples += f"- {col}: {row[col]}점\n"
+                    reference_examples += "\n"
+                
+                self.logger.info(f"참고 예시 생성 완료: {len(reference_examples)}자")
+            else:
+                self.logger.warning("참고 예시를 찾을 수 없습니다.")
+        else:
+            self.logger.info("참고 데이터가 없습니다.")
+        
         # 프롬프트 생성
         prompt = self.evaluation_prompt_template.format(
             metrics_description=metrics_description,
             scale_description=scale_description,
             source_text=source_text,
             target_text=target_text,
-            target_language=language_name
+            target_language=language_name,
+            reference_examples=reference_examples
         )
+        
+        # 참고 데이터 포함 여부 로그
+        if reference_examples:
+            self.logger.info("프롬프트에 참고 예시가 포함되었습니다.")
+        else:
+            self.logger.info("프롬프트에 참고 예시가 포함되지 않았습니다.")
+        
+        # 프롬프트 정보 로그
+        self.logger.info(f"전체 프롬프트 길이: {len(prompt)}자")
+        self.logger.info(f"평가 대상 텍스트 길이: 소스 {len(source_text)}자, 타겟 {len(target_text)}자")
+        self.logger.info(f"프롬프트 시작 부분: {prompt[:200]}...")
         
         try:
             # API 호출
             response = self.client.chat.completions.create(
                 model=self.config.DEFAULT_MODEL,
                 messages=[
-                    {"role": "system", "content": "당신은 매우 엄격한 번역 품질 평가자입니다. 완벽하지 않은 번역에는 낮은 점수를 주고, 문제점을 적극적으로 찾아서 지적해주세요. 5점은 정말 완벽한 번역에만 주어야 합니다."},
+                    {"role": "system", "content": "당신은 극도로 엄격한 번역 품질 평가자입니다. 모든 번역은 기본적으로 1점부터 시작하고, 완벽할 때만 5점을 주세요. 대부분의 번역은 1-3점 범위에 있어야 하며, 4-5점은 정말 예외적인 경우에만 부여하세요. 문제점을 적극적으로 찾아서 지적해주세요. 참고 데이터의 점수 분포를 참고하여 일관된 평가를 해주세요."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=self.config.MAX_TOKENS,
@@ -201,6 +265,22 @@ class LLMEvaluator:
                         if not isinstance(score, (int, float)) or score < 1 or score > 5:
                             self.logger.warning(f"유효하지 않은 점수 수정: {metric} = {score} -> 3")
                             result['evaluation'][metric]['score'] = 3
+                        else:
+                            # 소수점 점수를 정수로 변환 (내림)
+                            if isinstance(score, float):
+                                floored_score = int(score)
+                                self.logger.info(f"소수점 점수를 정수로 변환 (내림): {metric} = {score} -> {floored_score}")
+                                result['evaluation'][metric]['score'] = floored_score
+                            # 문자열로 된 소수점도 처리
+                            elif isinstance(score, str):
+                                try:
+                                    float_score = float(score)
+                                    floored_score = int(float_score)
+                                    self.logger.info(f"문자열 소수점 점수를 정수로 변환 (내림): {metric} = {score} -> {floored_score}")
+                                    result['evaluation'][metric]['score'] = floored_score
+                                except ValueError:
+                                    self.logger.warning(f"문자열 점수를 숫자로 변환 실패: {metric} = {score} -> 3")
+                                    result['evaluation'][metric]['score'] = 3
                 
                 self.logger.info("JSON 파싱 성공")
                 return result
@@ -225,14 +305,14 @@ class LLMEvaluator:
         self.logger.info("텍스트에서 점수 추출 시도...")
         
         for metric in metrics:
-            # 다양한 메트릭별 점수 패턴 찾기
+            # 다양한 메트릭별 점수 패턴 찾기 (소수점 포함)
             patterns = [
-                rf'"{metric}"[\s\S]*?"score"[\s\S]*?[\s:](\d+)',  # JSON 형식 내부
-                rf'{metric}[\s\S]*?(\d+)[\s/]*5',  # "metric: 4/5" 형식
-                rf'{metric}[\s\S]*?(\d+)점',  # "metric: 4점" 형식
-                rf'{metric}[\s\S]*?score[\s\S]*?(\d+)',  # "metric score: 4" 형식
-                rf'{metric}[\s\S]*?:[\s]*(\d+)',  # "metric: 4" 형식
-                rf'{metric}[\s\S]*?(\d+)',  # 가장 넓은 패턴
+                rf'"{metric}"[\s\S]*?"score"[\s\S]*?[\s:](\d+(?:\.\d+)?)',  # JSON 형식 내부 (소수점 포함)
+                rf'{metric}[\s\S]*?(\d+(?:\.\d+)?)[\s/]*5',  # "metric: 4.5/5" 형식
+                rf'{metric}[\s\S]*?(\d+(?:\.\d+)?)점',  # "metric: 4.5점" 형식
+                rf'{metric}[\s\S]*?score[\s\S]*?(\d+(?:\.\d+)?)',  # "metric score: 4.5" 형식
+                rf'{metric}[\s\S]*?:[\s]*(\d+(?:\.\d+)?)',  # "metric: 4.5" 형식
+                rf'{metric}[\s\S]*?(\d+(?:\.\d+)?)',  # 가장 넓은 패턴 (소수점 포함)
             ]
             
             score = 3  # 기본값
@@ -243,7 +323,14 @@ class LLMEvaluator:
                 if matches:
                     for match in matches:
                         try:
-                            found_score = int(match)
+                            # 소수점이 포함된 경우도 처리
+                            if '.' in match:
+                                float_score = float(match)
+                                found_score = int(float_score)  # 내림
+                                self.logger.info(f"{metric} 소수점 점수 발견: {match} -> {found_score} (내림)")
+                            else:
+                                found_score = int(match)
+                            
                             if 1 <= found_score <= 5:
                                 score = found_score
                                 reasoning = f"패턴 {i+1}로 추출된 점수: {found_score}"
@@ -289,7 +376,8 @@ class LLMEvaluator:
     
     def batch_evaluate(self, translation_pairs: List[Dict], 
                       max_concurrent: int = 5, custom_metrics: dict = None,
-                      custom_scale: dict = None, progress_callback=None) -> List[Dict]:
+                      custom_scale: dict = None, reference_data: dict = None,
+                      progress_callback=None) -> List[Dict]:
         """여러 번역을 병렬로 배치 평가합니다."""
         total = len(translation_pairs)
         self.logger.info(f"총 {total}개의 번역을 {max_concurrent}개씩 병렬 평가를 시작합니다.")
@@ -297,7 +385,7 @@ class LLMEvaluator:
         if total <= max_concurrent:
             # 작은 배치는 한 번에 처리
             return self._parallel_evaluate_batch(
-                translation_pairs, custom_metrics, custom_scale, progress_callback
+                translation_pairs, custom_metrics, custom_scale, reference_data, progress_callback
             )
         else:
             # 큰 배치는 청크로 나누어 처리
@@ -305,7 +393,7 @@ class LLMEvaluator:
             for i in range(0, total, max_concurrent):
                 chunk = translation_pairs[i:i + max_concurrent]
                 chunk_results = self._parallel_evaluate_batch(
-                    chunk, custom_metrics, custom_scale, progress_callback, start_index=i
+                    chunk, custom_metrics, custom_scale, reference_data, progress_callback, start_index=i
                 )
                 results.extend(chunk_results)
                 
@@ -318,7 +406,7 @@ class LLMEvaluator:
     
     def _parallel_evaluate_batch(self, translation_pairs: List[Dict], 
                                custom_metrics: dict = None, custom_scale: dict = None,
-                               progress_callback=None, start_index: int = 0) -> List[Dict]:
+                               reference_data: dict = None, progress_callback=None, start_index: int = 0) -> List[Dict]:
         """번역 쌍들을 병렬로 평가합니다."""
         
         def evaluate_single(pair, index):
@@ -340,7 +428,8 @@ class LLMEvaluator:
                     target_text=pair['target_text'],
                     target_language=pair['language_code'],
                     custom_metrics=custom_metrics,
-                    custom_scale=custom_scale
+                    custom_scale=custom_scale,
+                    reference_data=reference_data
                 )
                 
                 # 원본 데이터와 병합
@@ -391,61 +480,10 @@ class LLMEvaluator:
         
         return [r for r in results if r is not None]
     
-    def calculate_aggregate_scores(self, evaluation_results: List[Dict]) -> Dict:
-        """평가 결과의 집계 점수를 계산합니다."""
-        if not evaluation_results:
-            return {}
-        
-        metrics = ['Accuracy', 'Omission/Addition', 'Compliance', 'Fluency', 'Overall']
-        aggregates = {}
-        
-        # 전체 평균
-        for metric in metrics:
-            scores = []
-            for result in evaluation_results:
-                if 'evaluation' in result and metric in result['evaluation']:
-                    score = result['evaluation'][metric].get('score')
-                    if isinstance(score, (int, float)) and 1 <= score <= 5:
-                        scores.append(score)
-            
-            if scores:
-                aggregates[metric] = {
-                    'mean': sum(scores) / len(scores),
-                    'min': min(scores),
-                    'max': max(scores),
-                    'count': len(scores)
-                }
-        
-        # 언어별 평균
-        language_aggregates = {}
-        languages = set(result.get('target_language') for result in evaluation_results)
-        
-        for lang in languages:
-            if lang:
-                lang_results = [r for r in evaluation_results if r.get('target_language') == lang]
-                language_aggregates[lang] = {}
-                
-                for metric in metrics:
-                    scores = []
-                    for result in lang_results:
-                        if 'evaluation' in result and metric in result['evaluation']:
-                            score = result['evaluation'][metric].get('score')
-                            if isinstance(score, (int, float)) and 1 <= score <= 5:
-                                scores.append(score)
-                    
-                    if scores:
-                        language_aggregates[lang][metric] = {
-                            'mean': sum(scores) / len(scores),
-                            'min': min(scores),
-                            'max': max(scores),
-                            'count': len(scores)
-                        }
-        
-        return {
-            'overall': aggregates,
-            'by_language': language_aggregates,
-            'total_evaluations': len(evaluation_results)
-        }
+    # def calculate_aggregate_scores(self, evaluation_results: List[Dict]) -> Dict:
+    #     """평가 결과의 집계 점수를 계산합니다. (제거됨)"""
+    #     # 집계 점수 계산 기능이 제거되었습니다.
+    #     pass
 
 
 def main():
