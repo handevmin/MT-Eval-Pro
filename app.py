@@ -259,8 +259,10 @@ class MTEvalProApp:
                 return
             
             translation_file = None
-            # 업로드된 파일을 임시 저장
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
+            # 업로드된 파일을 임시 저장 (파일 확장자에 따라 적절한 suffix 설정)
+            file_extension = st.session_state.translation_file.name.split('.')[-1].lower()
+            suffix = f'.{file_extension}'
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
                 tmp.write(st.session_state.translation_file.getbuffer())
                 translation_file = tmp.name
             
@@ -317,7 +319,10 @@ class MTEvalProApp:
                 return
             
             translation_file = None
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp:
+            # 파일 확장자에 따라 적절한 suffix 설정
+            file_extension = st.session_state.translation_file.name.split('.')[-1].lower()
+            suffix = f'.{file_extension}'
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
                 tmp.write(st.session_state.translation_file.getbuffer())
                 translation_file = tmp.name
             
