@@ -35,7 +35,7 @@ def check_requirements():
     """필수 요구사항 확인"""
     config = Config()
     
-    print("시스템 요구사항 확인 중...")
+    print("시스템 요구사항 확인 중")
     
     # API 키 확인
     if not config.OPENAI_API_KEY:
